@@ -1,8 +1,8 @@
-##Overview
+## Overview
 
 This repository is used to store my answers to the homework exercises of __STAT545A__.
 
-##Self-introduction
+## Self-introduction
 
 * Name: Ning Shen
 * Student number: 70533633
@@ -10,4 +10,4 @@ This repository is used to store my answers to the homework exercises of __STAT5
 * GitHub main page: [NingShen1997](https://github.com/NingShen1997)
 
 
-:+1:
+Great class :+1:
