@@ -10,4 +10,4 @@ This repository is used to store my answers to the homework exercises of __STAT5
 * GitHub main page: [NingShen1997](https://github.com/NingShen1997)
 
 
-Great class :+1:
+Great course :+1:
