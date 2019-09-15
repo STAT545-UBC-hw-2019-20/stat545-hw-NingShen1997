@@ -1,0 +1,41 @@
+---
+title: "Gapminder_Exploration"
+author: "Ning Shen"
+date: "2019/9/14"
+output:
+  pdf_document: default
+  html_document:
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+library(gapminder)
+```
+
+### Simple Exploration
+
+#### 1. The `head` function demonstrates the first 6 rows of the dataset by default. It shows you what the dataset looks like.
+
+```{r}
+head(gapminder)
+```
+
+#### 2. The `str` function putputs the categories of each column/variable in this dataset.
+
+```{r}
+str(gapminder)
+```
+
+#### 3. Function `nrow` gives us the number of rows of the dataset while `ncol` gives the number of columns.
+
+```{r}
+nrow(gapminder)
+ncol(gapminder)
+```
+
+#### 4. The `summary` function applying on a dataset outputs the summary information of each column, which is counts for factor variables or quantiles for numerical variables.
+
+```{r}
+summary(gapminder)
+```
+
