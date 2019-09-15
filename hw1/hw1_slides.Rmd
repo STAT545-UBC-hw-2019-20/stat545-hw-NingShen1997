@@ -2,7 +2,8 @@
 title: "Exploration of Gapminder"
 author: "Ning Shen"
 date: "2019/9/14"
-output: ioslides_presentation
+output: 
+  ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
@@ -20,7 +21,7 @@ head(gapminder)
 The `str` function putputs the categories of each column/variable in this dataset.
 
 ```{r}
-str(gapminder)
+str(gapminder, vec.len = 2)
 ```
 
 ## `nrow` and `ncol`
@@ -32,7 +33,6 @@ ncol(gapminder)
 ```
 
 ## `summary`
-The `summary` function applying on a dataset outputs the summary information of each column, which is counts for factor variables or quantiles for numerical variables.
 
 ```{r}
 summary(gapminder)
