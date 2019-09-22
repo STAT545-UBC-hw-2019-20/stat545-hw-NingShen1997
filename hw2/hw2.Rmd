@@ -1,0 +1,118 @@
+---
+title: "hw2"
+author: "Ning Shen"
+date: "2019/9/21"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(gapminder)
+library(tidyverse)
+library(knitr)
+```
+
+## Question 1.1
+
+```{r 1.1}
+gapminder %>%
+  filter(country %in% c("China","Canada","Poland") & year %in% 1970:1979)
+```
+
+## Question 1.2
+
+```{r 1.2}
+gapminder %>%
+  filter(country %in% c("China","Canada","Poland") & year %in% 1970:1979) %>%
+  select(country, gdpPercap)
+```
+
+## Question 1.3
+
+```{r}
+gapminder %>%
+  mutate(increase = c(NA, diff(lifeExp))) %>%
+  filter(increase < 0) %>%
+  head(6)
+```
+
+
+## Question 1.4
+
+```{r}
+gapminder %>%
+  group_by(country) %>%
+  filter(gdpPercap == max(gdpPercap)) %>%
+  head(6)
+```
+
+
+
+
+## Question 1.5
+
+```{r fig.width=4, fig.height=3}
+gapminder %>%
+  transmute(log.gdpPercap = log(gdpPercap), lifeExp) %>%
+  ggplot(aes(log.gdpPercap,lifeExp)) + geom_point(alpha = 0.5)
+```
+
+
+## Question 2
+
+`continent` is a categorical variable and `lifeExp` is a quantitative variable, which are both from dataset `gapminder`.
+
+#### What are possible values (or range, whichever is appropriate) of each variable?
+```{r}
+gapminder %>%
+  select(continent, lifeExp) %>%
+  summary()
+```
+The summary of these two variable indicates that `continent` can only take values in "Africa", "Americas", "Asia", "Europe", "Oceania"; and `lifeExp` only takes value from 23.60 to 82.60.
+
+#### What values are typical? What’s the spread? What’s the distribution? Etc., tailored to the variable at hand.
+
+- For `continent`:
+```{r}
+gapminder %>%
+  select(continent) %>%
+  table() %>%
+  kable(col.names = c("continent","Freq"))
+```
+
+From the contingency table of `continent` above, "Africa" appears to be the most frequent (624 times), followed by "Asia", " Europe", "Americas". And "Oceania" has the lowest frequency of only 24 times.
+
+- For `lifeExp`:
+```{r fig.width=4, fig.height=3}
+gapminder %>%
+  ggplot(aes(lifeExp)) + geom_density()
+```
+
+There are two peaks in the density plot of `lifeExp` above, i.e. it follows a bimodal distribution. The two peaks are arround 45 and 72 where the right one is higher.
+
+
+## Question 3
+
+####Population vs. Life Expectancy in China
+
+```{r fig.width=4, fig.height=3}
+gapminder %>%
+  filter(country == "China") %>%
+  ggplot(aes(lifeExp, pop)) + 
+  labs(title = "Population vs. Life Expectancy in China") + 
+  geom_point()
+```
+
+From the scatter plot above, it seems that population and life expectancy have some sort of positive linear relationship, espectially when life expectancy is larger than 60.
+
+#### Life Expectancy in Different Continents
+```{r fig.width=4, fig.height=3}
+gapminder %>%
+  ggplot(aes(x = continent, y = lifeExp)) + 
+  geom_boxplot() +
+  labs(title = "Life Expectancy in Different Continents")
+```
+
+From the boxplot above, it seems that Oceania and Europe have relatively high life expectancy, followed by Americas, Asia and Africa. In addition, Asia has the largest variance based on the length of the box.
