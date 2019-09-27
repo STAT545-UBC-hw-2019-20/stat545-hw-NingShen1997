@@ -16,7 +16,9 @@ library(DT)
 library(ggridges)
 ```
 
-## Solution to Task 2
+## Task 2
+
+####Get the maximum and minimum of GDP per capita for all continents.
 
 ```{r fig.width = 8, fig.height = 3}
 # data2 contains the maximums and minimums of GDP of the continents.
@@ -38,7 +40,9 @@ data2 %>%
 Of all maximums of GDP from five continents, Asia's is the highest one, followed by Europe, Americas, Oceania and Africa. Of all minimums of GDP, Africa has the lowest one, followed by Asia, Europe, Americas and Oceania.
 
 
-## Solution to Task 3
+## Task 3
+
+####Look at the spread of GDP per capita within the continents.
 
 ```{r fig.width = 8, fig.height = 3}
 # summarise the median, min and max of GDP per capita in each continent
@@ -57,7 +61,9 @@ gapminder %>%
 From the density ridge plot above, Oceania has the overall highest GDP according to the speard. Europe is similar to Oceania but more right-skewed. Asia, Americas and Africa all have a fierce peak near zero, which indicates that a lot of countries in these three continents are relatively poor.
 
 
-## Solution to Task 5
+## Task 5
+
+####How is life expectancy changing over time on different continents?
 
 ```{r fig.width = 8, fig.height = 5}
 gapminder %>%
