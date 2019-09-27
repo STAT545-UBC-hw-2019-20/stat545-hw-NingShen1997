@@ -1,0 +1,91 @@
+---
+title: "hw3"
+author: "Ning Shen"
+date: "2019/9/27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reshape)
+library(gapminder)
+library(tidyverse)
+library(knitr)
+library(scales)
+library(DT)
+library(ggridges)
+```
+
+## Solution to Task 2
+
+```{r fig.width = 8, fig.height = 3}
+# data2 contains the maximums and minimums of GDP of the continents.
+(data2 <- gapminder %>%
+  group_by(continent) %>%
+  summarize(MaximumGDP = round(max(gdpPercap),1), MinimumGDP = round(min(gdpPercap),1)))  %>%
+  datatable()
+
+data2 %>%
+  as.data.frame() %>%
+  melt(id.vars=1) %>% # melt down the dataset in order to plot min and max at the same time
+  mutate(min.max = variable , gdpPercap = value ) %>%
+  ggplot(aes(continent, gdpPercap)) + 
+  facet_wrap(~ min.max, nrow = 1, scales = "free") +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col()
+```
+
+Of all maximums of GDP from five continents, Asia's is the highest one, followed by Europe, Americas, Oceania and Africa. Of all minimums of GDP, Africa has the lowest one, followed by Asia, Europe, Americas and Oceania.
+
+
+## Solution to Task 3
+
+```{r fig.width = 8, fig.height = 3}
+# summarise the median, min and max of GDP per capita in each continent
+gapminder %>%
+  group_by(continent) %>%
+  summarize(MaximumGDP = round(max(gdpPercap),1), MedianGDP = round(median(gdpPercap),1), MinimumGDP = round(min(gdpPercap),1)) %>%
+  datatable()
+
+# the ridge plot of GDP per capita
+gapminder %>%
+  ggplot(aes(gdpPercap, continent)) +
+  ggridges::geom_density_ridges() +
+  scale_x_continuous(labels = scales::comma_format())
+```
+
+From the density ridge plot above, Oceania has the overall highest GDP according to the speard. Europe is similar to Oceania but more right-skewed. Asia, Americas and Africa all have a fierce peak near zero, which indicates that a lot of countries in these three continents are relatively poor.
+
+
+## Solution to Task 5
+
+```{r fig.width = 8, fig.height = 5}
+gapminder %>%
+  select(continent, year, lifeExp) %>%
+  datatable()
+
+# the life expectancy over the years in each continent
+gapminder %>%
+  ggplot(aes(year, lifeExp, colour = continent)) + 
+  facet_wrap(~ continent, nrow = 2) +
+  geom_jitter(alpha = 0.5)
+```
+
+On every continent, the life expectancies all have uptrend over the years. The variance in Africa is increasing while the variance in Americas is decreasing.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
