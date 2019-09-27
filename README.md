@@ -19,6 +19,5 @@ Assignments | Due Date
 * Student number: 70533633
 * Current status: First-year Ph.D. student at the Statistics department 
 * GitHub main page: [NingShen1997](https://github.com/NingShen1997)
+* I love dogs soooooo much! :dog2::dog2::dog2:
 
-
-![](https://media2.giphy.com/media/iD9gFo88JoMKc/giphy.gif?cid=790b7611861dd74c36fd8e0f4c643937861e1f9a0b7d5edb&rid=giphy.gif)
