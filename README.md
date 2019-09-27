@@ -21,4 +21,4 @@ Assignments | Due Date
 * GitHub main page: [NingShen1997](https://github.com/NingShen1997)
 
 
-Great course :+1:
+![](https://media2.giphy.com/media/iD9gFo88JoMKc/giphy.gif?cid=790b7611861dd74c36fd8e0f4c643937861e1f9a0b7d5edb&rid=giphy.gif)
