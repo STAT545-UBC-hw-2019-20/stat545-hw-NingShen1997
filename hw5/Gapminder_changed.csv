@@ -1,0 +1,16 @@
+continent,Quantile,Population
+Africa,Min,60011
+Africa,Median,4579311
+Africa,Max,135031164
+Americas,Min,662850
+Americas,Median,6227510
+Americas,Max,301139947
+Asia,Min,120447
+Asia,Median,14530830.5
+Asia,Max,1318683096
+Europe,Min,147962
+Europe,Median,8551125
+Europe,Max,82400996
+Oceania,Min,1994794
+Oceania,Median,6403491.5
+Oceania,Max,20434176

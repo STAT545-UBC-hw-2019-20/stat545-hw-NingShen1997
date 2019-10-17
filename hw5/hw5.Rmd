@@ -1,0 +1,206 @@
+---
+title: "Assignment 5"
+author: "Ning Shen"
+date: "2019/10/16"
+output: 
+  html_document:
+    keep_md: TRUE
+    theme: yeti
+    toc: TRUE
+    toc_depth: 2
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(DT))
+suppressPackageStartupMessages(library(grid))
+suppressPackageStartupMessages(library(gridExtra))
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(cowplot))
+```
+
+# Exercise 1
+#### Task: In your own words, summarize the value of the `here::here` package in 250 words or fewer.
+
+First of all, the `here` package eliminates the trouble of setting up a local working directory in every R script. Unlike `setwd()`, the `here::here()` function automatically recognizes the current working path of the project. This is an advantage, especially when reproducibility is required in practice because we are able to move the project under any folder and run it smoothly without adjusting a single letter. On the other hand, the `here::here()` function allows the script to be run on any system no matter the difference of code format. This function is also more flexible since it can find the right directory outside the current folder without denoting `../` before the path.
+
+
+
+# Exercise 2
+
+## Drop 'Oceania'.
+
+Filter the dataset to remove observations associated with the continent of Oceania:
+```{r}
+gapminder_new <- gapminder %>%
+  filter(continent != "Oceania")
+```
+
+
+Features of `gapminder_new`:
+```{r}
+gapminder_new$continent %>% levels  # levels of 'continent' column
+gapminder_new %>% nrow  # number of rows in the dataset
+gapminder_new$continent %>% summary
+```
+
+Remove unused factor levels:
+```{r}
+gapminder_new_dropped <- gapminder_new %>%
+  droplevels()
+```
+
+Featured of `gapminder_new_dropped`:
+```{r}
+gapminder_new_dropped$continent %>% levels  # levels of 'continent' column
+gapminder_new_dropped %>% nrow  # number of rows in the dataset
+gapminder_new_dropped$continent %>% summary
+```
+Number of observations still remains the same, but Oceania has been removed from the factor levels and dissapeared when we called `summary`.
+
+
+## Reorder the levels.
+
+Features of the original dataset:
+```{r}
+levels(gapminder$continent)
+gapminder %>%
+  arrange(continent) %>%
+  datatable()
+```
+
+Reorder the levels of continent by the median of population:
+
+```{r}
+gapminder_reordered <- gapminder %>%
+  mutate(continent = fct_reorder(continent, pop, mean))
+
+levels(gapminder_reordered$continent)
+```
+The orders of continents changed from alphabetical to based on mean population. 
+
+```{r}
+gapminder_reordered %>%
+  group_by(continent) %>%
+  summarise(PopMean = mean(pop))
+
+gapminder_reordered %>%
+  arrange(continent) %>%
+  datatable()
+```
+
+Two plots to show the difference:
+```{r}
+p1 <- gapminder_reordered %>%
+  group_by(continent) %>%
+  summarise(PopMean = mean(pop)) %>% 
+  ggplot(aes(continent, PopMean)) + 
+  geom_bar(aes(fill = PopMean),stat = "identity") + 
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Before reorder:")
+
+p2 <- gapminder %>%
+  group_by(continent) %>%
+  summarise(PopMean = mean(pop)) %>% 
+  ggplot(aes(continent, PopMean)) + 
+  geom_bar(aes(fill = PopMean),stat = "identity") + 
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("After reorder:")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+# Exercise 3
+
+## File output
+
+```{r}
+(gapminder_output <- gapminder %>%
+  group_by(continent) %>%
+  summarise(Min = min(pop), Median = median(pop), Max = max(pop)) %>%
+  pivot_longer(cols = -continent, names_to = "Quantile", values_to = "Population")) %>%
+  datatable()
+gapminder_output %>%
+  write_csv(here("hw5","Gapminder_changed.csv"))
+str(gapminder_output)
+```
+
+
+## File input
+```{r}
+gapminder_input <- read_csv(here("hw5","Gapminder_changed.csv"), col_types = "ffn")
+str(gapminder_input)
+```
+The class of columns `continent` and `quantile` were input as factor defined in the option `col_types = "ffn"`; otherwise they will be both input as characters.
+
+```{r}
+gapminder_input$Quantile %>% levels
+gapminder_input %>%
+  mutate(Quantile = fct_rev(Quantile)) %>% ## reorder the levels of Quantile
+  arrange(Quantile) %>%
+  datatable()
+```
+The order of levels becomes "max, median, min".
+
+
+# Exercise 4
+
+#### Task: Create a side-by-side plot and juxtapose your first attempt (show the original figure as-is) with a revised attempt after some time spent working on it and implementing principles of effective plotting principles. Comment and reflect on the differences.
+
+```{r,  message = FALSE}
+p1 <- gapminder %>%
+  ggplot(aes(gdpPercap, continent)) +
+  ggridges::geom_density_ridges() 
+  
+p2 <- gapminder %>%
+  ggplot(aes(gdpPercap, continent)) +
+  ggridges::geom_density_ridges(aes(fill = continent, colour = continent),alpha = 0.7) +
+  scale_x_continuous(labels = scales::comma_format()) +
+  theme_linedraw() +
+  theme(legend.position = "none") +
+  ggtitle("Ridge Plot of GDP per Capita for Continents") +
+  xlab("GDP per capita")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+(plot_grid(p1, p2, ncol = 1,
+          labels = c("OLD", "NEW")) -> p)
+```
+
+- Colors of the ridges were added to the plot.
+- X-axis is adjusted to follow the comma format.
+- The label for x-axis and title for the whole plot were added.
+- Theme of the plot is revised.
+
+
+# Exerceise 5
+```{r  message = FALSE}
+ggsave(here("hw5","Plot1.png"), plot = p1)
+ggsave(here("hw5","Plot2.png"), plot = p2)
+ggsave(here("hw5","Plot.png"), plot = p)
+```
+
+Here we show the three plots just got saved to local path in order: 
+
+
+![P1. the original plot](/Users/SX/Documents/CANADA/STUDY/2019Winter/STAT545A/Homework/stat545-hw-NingShen1997/hw5/Plot1.png)
+
+![P2. the revised plot](/Users/SX/Documents/CANADA/STUDY/2019Winter/STAT545A/Homework/stat545-hw-NingShen1997/hw5/Plot2.png)
+
+![P3. comparison of the old and the new plots](/Users/SX/Documents/CANADA/STUDY/2019Winter/STAT545A/Homework/stat545-hw-NingShen1997/hw5/Plot.png)
+
+From these figures, we can say `ggsave` works perfectly. 
+
+
+
+
+
+
+
+
+
